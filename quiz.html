@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Aren't You Booking Clients? - Funnel Quiz</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .quiz-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .quiz-header {
+            padding: 40px 40px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .quiz-header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .quiz-header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .quiz-content {
+            padding: 40px;
+        }
+
+        .question-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .question-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            color: #667eea;
+            font-size: 14px;
+            font-weight: bold;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 22px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .question-counter {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option {
+            padding: 20px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-size: 16px;
+            text-align: left;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f8f9ff;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .option.selected {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 40px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-next {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-next:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn-prev {
+            background: #f0f0f0;
+            color: #666;
+        }
+
+        .btn-prev:hover {
+            background: #e0e0e0;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .result-section {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .result-section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .result-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 30px;
+        }
+
+        .result-description {
+            font-size: 18px;
+            line-height: 1.6;
+            color: #555;
+            margin-bottom: 40px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 40px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        .intro-section {
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px 40px;
+            border: none;
+            border-radius: 30px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .quiz-content {
+                padding: 30px 20px;
+            }
+            
+            .quiz-header {
+                padding: 30px 20px 15px;
+            }
+            
+            .quiz-header h1 {
+                font-size: 24px;
+            }
+            
+            .question {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+        </div>
+        
+        <div class="quiz-header">
+            <h1>"Why Aren't You Booking Clients?"</h1>
+            <p>Discover Your #1 Funnel Block and How to Fix It — In Less Than 2 Minutes</p>
+        </div>
+
+        <div class="quiz-content">
+            <!-- Intro Section -->
+            <div class="intro-section active" id="intro">
+                <p style="font-size: 18px; line-height: 1.6; color: #555; margin-bottom: 20px;">
+                    This quick quiz will diagnose exactly where your funnel is leaking leads and give you a personalized action plan to fix it.
+                </p>
+                <button class="start-btn" onclick="startQuiz()">Start Quiz</button>
+            </div>
+
+            <!-- Question 1 -->
+            <div class="question-section" id="q1">
+                <div class="section-title">Traffic & Visibility</div>
+                <div class="question-counter">Question 1 of 10</div>
+                <div class="question">Where are most of your leads coming from?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'ig-stories')">IG Stories/Reels/TikTok</div>
+                    <div class="option" onclick="selectOption(this, 'referrals')">Referrals</div>
+                    <div class="option" onclick="selectOption(this, 'paid-ads')">Paid Ads</div>
+                    <div class="option" onclick="selectOption(this, 'dont-know')">I don't really know</div>
+                </div>
+            </div>
+
+            <!-- Question 2 -->
+            <div class="question-section" id="q2">
+                <div class="section-title">Traffic & Visibility</div>
+                <div class="question-counter">Question 2 of 10</div>
+                <div class="question">How consistent are you with content?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'daily')">I post daily</div>
+                    <div class="option" onclick="selectOption(this, 'burnout')">I try but burn out fast</div>
+                    <div class="option" onclick="selectOption(this, 'barely')">I barely post</div>
+                    <div class="option" onclick="selectOption(this, 'none')">I don't post at all</div>
+                </div>
+            </div>
+
+            <!-- Question 3 -->
+            <div class="question-section" id="q3">
+                <div class="section-title">Funnel Entry / First Contact</div>
+                <div class="question-counter">Question 3 of 10</div>
+                <div class="question">What happens when someone shows interest?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'dm-manual')">I DM them manually</div>
+                    <div class="option" onclick="selectOption(this, 'drop-link')">I drop a link</div>
+                    <div class="option" onclick="selectOption(this, 'ask-ghost')">I ask questions then ghost</div>
+                    <div class="option" onclick="selectOption(this, 'dont-know-what')">I don't know what to do</div>
+                </div>
+            </div>
+
+            <!-- Question 4 -->
+            <div class="question-section" id="q4">
+                <div class="section-title">Funnel Entry / First Contact</div>
+                <div class="question-counter">Question 4 of 10</div>
+                <div class="question">Do you have a lead magnet?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'yes-no-grabs')">Yes, but no one grabs it</div>
+                    <div class="option" onclick="selectOption(this, 'yes-works')">Yes, and it works</div>
+                    <div class="option" onclick="selectOption(this, 'no-booking')">No, I just send a booking link</div>
+                    <div class="option" onclick="selectOption(this, 'what-magnet')">Lead magnet…?</div>
+                </div>
+            </div>
+
+            <!-- Question 5 -->
+            <div class="question-section" id="q5">
+                <div class="section-title">Funnel System</div>
+                <div class="question-counter">Question 5 of 10</div>
+                <div class="question">Do you have a funnel system in place?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'yes-not-converting')">Yes, but it's not converting</div>
+                    <div class="option" onclick="selectOption(this, 'just-landing')">Just a landing page</div>
+                    <div class="option" onclick="selectOption(this, 'all-manual')">I do it all manually</div>
+                    <div class="option" onclick="selectOption(this, 'dont-know-funnel')">I don't really know what a funnel is</div>
+                </div>
+            </div>
+
+            <!-- Question 6 -->
+            <div class="question-section" id="q6">
+                <div class="section-title">Funnel System</div>
+                <div class="question-counter">Question 6 of 10</div>
+                <div class="question">How do leads book calls with you?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'calendly-dm')">Calendly link in DMs</div>
+                    <div class="option" onclick="selectOption(this, 'hidden-bio')">Hidden in my link-in-bio</div>
+                    <div class="option" onclick="selectOption(this, 'manual-remind')">I manually remind them</div>
+                    <div class="option" onclick="selectOption(this, 'rarely-book')">They rarely book</div>
+                </div>
+            </div>
+
+            <!-- Question 7 -->
+            <div class="question-section" id="q7">
+                <div class="section-title">Automation & Scaling</div>
+                <div class="question-counter">Question 7 of 10</div>
+                <div class="question">Do you use automation?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'fully-automated')">Yes, fully automated</div>
+                    <div class="option" onclick="selectOption(this, 'few-emails')">A few emails</div>
+                    <div class="option" onclick="selectOption(this, 'too-techy')">Not yet — too techy</div>
+                    <div class="option" onclick="selectOption(this, 'do-all')">Nope, I do it all</div>
+                </div>
+            </div>
+
+            <!-- Question 8 -->
+            <div class="question-section" id="q8">
+                <div class="section-title">Automation & Scaling</div>
+                <div class="question-counter">Question 8 of 10</div>
+                <div class="question">What's your biggest frustration?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'people-ghost')">People ghost me</div>
+                    <div class="option" onclick="selectOption(this, 'too-much-effort')">Too much effort, too few results</div>
+                    <div class="option" onclick="selectOption(this, 'dont-know-works')">I don't know what works</div>
+                    <div class="option" onclick="selectOption(this, 'feel-invisible')">I feel invisible</div>
+                </div>
+            </div>
+
+            <!-- Question 9 -->
+            <div class="question-section" id="q9">
+                <div class="section-title">Readiness</div>
+                <div class="question-counter">Question 9 of 10</div>
+                <div class="question">How many clients do you want to book per month?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, '3-5')">3–5</div>
+                    <div class="option" onclick="selectOption(this, '6-10')">6–10</div>
+                    <div class="option" onclick="selectOption(this, '10-15')">10–15</div>
+                    <div class="option" onclick="selectOption(this, '15-plus')">15+</div>
+                </div>
+            </div>
+
+            <!-- Question 10 -->
+            <div class="question-section" id="q10">
+                <div class="section-title">Readiness</div>
+                <div class="question-counter">Question 10 of 10</div>
+                <div class="question">How ready are you to fix your funnel?</div>
+                <div class="options">
+                    <div class="option" onclick="selectOption(this, 'ready-system')">I'm ready — just need the right system</div>
+                    <div class="option" onclick="selectOption(this, 'fast-simple')">If it's fast and simple, I'm in</div>
+                    <div class="option" onclick="selectOption(this, 'curious-unsure')">I'm curious but unsure</div>
+                    <div class="option" onclick="selectOption(this, 'just-exploring')">Just exploring</div>
+                </div>
+            </div>
+
+            <!-- Navigation Buttons -->
+            <div class="nav-buttons" id="navButtons" style="display: none;">
+                <button class="btn btn-prev" onclick="previousQuestion()" id="prevBtn">Previous</button>
+                <button class="btn btn-next" onclick="nextQuestion()" id="nextBtn" disabled>Next</button>
+            </div>
+
+            <!-- Results Section -->
+            <div class="result-section" id="results">
+                <div class="result-badge" id="resultType"></div>
+                <div class="result-description" id="resultDescription"></div>
+                <a href="#" class="cta-button" onclick="bookCall()">Book Your Free Call</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentQuestion = 0;
+        let answers = {};
+        const totalQuestions = 10;
+
+        const results = {
+            'ghost-zone': {
+                title: 'The Ghost Zone Funnel',
+                description: "You're getting interest, but you're ghosting them (or they're ghosting you). No follow-up systems, no automation, no next step. Leads disappear. Let's fix that with a plug-and-play funnel and AI automation."
+            },
+            'manual-overload': {
+                title: 'The Manual Overload Funnel',
+                description: "You're doing it all manually — posting, DMing, reminding. It's burning you out and leaking leads. Time to automate and scale with systems that work while you sleep."
+            },
+            'dead-end': {
+                title: 'The Dead-End Funnel',
+                description: "You're getting attention, but it leads nowhere. No landing page, no automation, no lead magnet. Just dead-ends. Let's build you a complete conversion path that turns attention into clients."
+            },
+            'look-good': {
+                title: 'The Look-Good Funnel',
+                description: "It looks nice — maybe a page and some emails — but it doesn't convert. You need messaging, psychology, and automation upgrades that actually turn visitors into paying clients."
+            },
+            'no-funnel': {
+                title: 'The No-Funnel Funnel',
+                description: "You're hustling without any system. There's no structured path from content → lead → call → client. Let's build you a complete funnel that works automatically."
+            },
+            'invisible': {
+                title: 'The Invisible Funnel',
+                description: "You're posting, but nobody's biting. Your targeting, positioning, or visibility needs fixing — fast. Let's get you seen by the right people who are ready to buy."
+            }
+        };
+
+        function startQuiz() {
+            document.getElementById('intro').style.display = 'none';
+            document.getElementById('navButtons').style.display = 'flex';
+            showQuestion(1);
+            updateProgress();
+        }
+
+        function showQuestion(questionNum) {
+            // Hide all questions
+            for (let i = 1; i <= totalQuestions; i++) {
+                document.getElementById(`q${i}`).classList.remove('active');
+            }
+            
+            // Show current question
+            document.getElementById(`q${questionNum}`).classList.add('active');
+            
+            // Update navigation buttons
+            document.getElementById('prevBtn').disabled = questionNum === 1;
+            document.getElementById('nextBtn').disabled = !answers[`q${questionNum}`];
+            
+            if (questionNum === totalQuestions) {
+                document.getElementById('nextBtn').textContent = 'Get My Results';
+            } else {
+                document.getElementById('nextBtn').textContent = 'Next';
+            }
+        }
+
+        function selectOption(element, value) {
+            // Remove selected class from all options in this question
+            const options = element.parentNode.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.remove('selected'));
+            
+            // Add selected class to clicked option
+            element.classList.add('selected');
+            
+            // Store answer
+            answers[`q${currentQuestion}`] = value;
+            
+            // Enable next button
+            document.getElementById('nextBtn').disabled = false;
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < totalQuestions) {
+                currentQuestion++;
+                showQuestion(currentQuestion);
+                updateProgress();
+            } else {
+                showResults();
+            }
+        }
+
+        function previousQuestion() {
+            if (currentQuestion > 1) {
+                currentQuestion--;
+                showQuestion(currentQuestion);
+                updateProgress();
+            }
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion) / totalQuestions) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+        }
+
+        function calculateResult() {
+            const scores = {
+                'ghost-zone': 0,
+                'manual-overload': 0,
+                'dead-end': 0,
+                'look-good': 0,
+                'no-funnel': 0,
+                'invisible': 0
+            };
+
+            // Scoring logic based on answers
+            if (answers.q1 === 'dont-know') scores['invisible'] += 2;
+            if (answers.q2 === 'none' || answers.q2 === 'barely') scores['invisible'] += 2;
+            if (answers.q2 === 'burnout') scores['manual-overload'] += 1;
+            
+            if (answers.q3 === 'ask-ghost') scores['ghost-zone'] += 3;
+            if (answers.q3 === 'dm-manual') scores['manual-overload'] += 2;
+            if (answers.q3 === 'dont-know-what') scores['dead-end'] += 2;
+            
+            if (answers.q4 === 'what-magnet' || answers.q4 === 'no-booking') scores['dead-end'] += 2;
+            if (answers.q4 === 'yes-no-grabs') scores['look-good'] += 2;
+            
+            if (answers.q5 === 'dont-know-funnel') scores['no-funnel'] += 3;
+            if (answers.q5 === 'all-manual') scores['manual-overload'] += 2;
+            if (answers.q5 === 'yes-not-converting') scores['look-good'] += 2;
+            if (answers.q5 === 'just-landing') scores['dead-end'] += 1;
+            
+            if (answers.q6 === 'rarely-book') scores['ghost-zone'] += 2;
+            if (answers.q6 === 'manual-remind') scores['manual-overload'] += 2;
+            if (answers.q6 === 'hidden-bio') scores['dead-end'] += 1;
+            
+            if (answers.q7 === 'do-all') scores['manual-overload'] += 2;
+            if (answers.q7 === 'too-techy') scores['no-funnel'] += 1;
+            
+            if (answers.q8 === 'people-ghost') scores['ghost-zone'] += 2;
+            if (answers.q8 === 'too-much-effort') scores['manual-overload'] += 2;
+            if (answers.q8 === 'feel-invisible') scores['invisible'] += 2;
+            if (answers.q8 === 'dont-know-works') scores['no-funnel'] += 1;
+
+            // Find the highest scoring result
+            let maxScore = 0;
+            let resultType = 'no-funnel'; // default
+            
+            for (const [key, score] of Object.entries(scores)) {
+                if (score > maxScore) {
+                    maxScore = score;
+                    resultType = key;
+                }
+            }
+
+            return resultType;
+        }
+
+        function showResults() {
+            // Hide quiz content
+            document.getElementById(`q${currentQuestion}`).classList.remove('active');
+            document.getElementById('navButtons').style.display = 'none';
+            
+            // Calculate and show results
+            const resultType = calculateResult();
+            const result = results[resultType];
+            
+            document.getElementById('resultType').textContent = result.title;
+            document.getElementById('resultDescription').textContent = result.description;
+            document.getElementById('results').classList.add('active');
+            
+            // Update progress to 100%
+            document.getElementById('progressFill').style.width = '100%';
+        }
+
+        function bookCall() {
+            // Your actual booking link
+            try {
+                window.open('https://www.automatedgainsfunnel.com/4aa40f0c', '_blank');
+            } catch (error) {
+                // Fallback if popup is blocked
+                window.location.href = 'https://www.automatedgainsfunnel.com/4aa40f0c';
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', function() {
+            currentQuestion = 1;
+        });
+    </script>
+</body>
+</html>
